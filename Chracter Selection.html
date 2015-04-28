@@ -1,0 +1,268 @@
+<title> Character selection </title>
+
+<!-- copy and paste the next 2 lines to setup the sound files, you must modify the loadsoundchrome.js file with your sounds -->
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+<!-- Stop copying here -->
+
+<center>
+    <script type="text/javascript" src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+PImage blue;
+PImage yellow;
+PImage red;
+PImage background;
+PImage heart;
+PImage speed;
+Pfont pacfont;
+
+int bx;
+int by;
+
+int yx;
+int yy;
+
+int rx;
+int ry;
+int soundlock;
+int lock;
+int blueAction;
+
+int yellowAction;
+//0-stop
+//1-moveR
+//2-moveL
+
+int redAction;
+
+void setup()
+{  
+
+	blue = loadImage("blueo.png")
+	yellow = loadImage("yellowo.png")
+	red = loadImage("redo.png")
+	background = loadImage("sel.png")
+	heart = loadImage("heart.png")
+	speed = loadImage("speed.png")
+	PacFont = loadFont("PacFont");
+
+	bx = 50;
+	by = 250;
+
+	yx = 50;
+	yy = 430;
+
+	rx = 50;
+	ry = 630;
+
+	blueAction = 1;
+	yellowAction = 1;
+	redAction = 1;
+	lock = 0;
+	
+}  
+
+
+void draw()
+{
+
+
+
+//background music
+	if(lock ==0)
+	{
+		lock =1;
+		soundManager.play('s1');
+	}
+
+
+
+
+	
+	size(600,800);  
+
+	frameRate( 30 );		
+
+	image(background,0,0,600,800);
+
+	fill(255,255,255);
+	textFont(PacFont,50);
+	text("Select Your",  35,95);
+	text("Hero",  180,180);
+
+	if(blueAction == 1)
+	{
+		bx = bx + 9;
+	}
+
+	if(blueAction == 2)
+	{
+		bx = bx - 9;
+	}
+
+	if(yellowAction == 1)
+	{
+		yx = yx + 6;
+	}
+
+	if(yellowAction == 2)
+	{
+		yx = yx - 6;
+	}
+
+	if(redAction == 1)
+	{
+		rx = rx + 15;
+	}
+
+	if(redAction == 2)
+	{
+		rx = rx - 15;
+	}
+
+
+	if(bx < 50)
+	{
+		blueAction = 1;
+	}
+	if(bx > 200)
+	{
+		blueAction = 2;
+	}
+
+	if(yx < 50)
+	{
+		yellowAction = 1;
+	}
+	if(yx > 200)
+	{
+		yellowAction = 2;
+	}
+
+
+	if(rx < 50)
+	{
+		redAction = 1;
+	}
+	if(rx > 200)
+	{
+		redAction = 2;
+	}
+
+
+//blue hero link
+	if (10 <mouseX && mouseX<590  && 220<mouseY && mouseY<400)
+	{
+		noStroke();
+		fill(255,255,255,120);
+		rect(10,220,580,180,20);
+	}
+
+	if (mousePressed == true && mouseButton == LEFT)
+	{
+		if (10 <mouseX && mouseX<590   && 220<mouseY && mouseY<400)
+		{
+			link("lv1b.html");
+		}
+	}
+
+//yellow hero link
+	if (10 <mouseX && mouseX<590 && 420<mouseY && mouseY<600)
+	{
+		noStroke();
+		fill(255,255,255,120);
+		rect(10,420,580,180,20);
+
+	}
+
+	if (mousePressed == true && mouseButton == LEFT)
+	{
+		if (10 <mouseX && mouseX<590 && 420<mouseY && mouseY<600)
+		{
+			link("lv1y.html");
+		}
+	}
+
+//red hero link
+	if (10 <mouseX && mouseX<590 && 620<mouseY && mouseY<800)
+	{
+		noStroke();
+		fill(255,255,255,120);
+		rect(10,620,580,180,20);
+	}
+
+	if (mousePressed == true && mouseButton == LEFT)
+	{
+		if (10 <mouseX && mouseX<590  && 620<mouseY && mouseY<800)
+		{
+			link("lv1r.html");
+		}
+	}
+
+
+	noStroke();
+//blue hero spec  
+	fill(0,0,255);
+	image(blue,bx,by,160,160);
+
+	image(heart,400,250,90,60);
+	image(heart,430,250,90,60);
+	image(heart,460,250,90,60);
+
+	image(speed,410,310,60,40);
+	image(speed,440,310,60,40);
+	image(speed,470,310,60,40);
+	image(speed,500,310,60,40);
+
+//yellow hero spec    
+	fill(255,255,0);
+	image(yellow,yx,yy,160,160);
+
+	image(heart,400,450,90,60);
+	image(heart,430,450,90,60);
+	image(heart,460,450,90,60);
+	image(heart,490,450,90,60);
+	image(heart,520,450,90,60);
+
+	image(speed,410,510,60,40);
+	image(speed,440,510,60,40);
+
+
+//red hero spec
+	fill(255,0,0);
+	image(red,rx,ry,160,160);
+
+	image(heart,400,650,90,60);
+	image(heart,430,650,90,60);
+
+	image(speed,410,710,60,40);
+	image(speed,440,710,60,40);
+	image(speed,470,710,60,40);
+	image(speed,500,710,60,40);
+	image(speed,530,710,60,40);
+
+
+
+
+	if(mousePressed == true && mouseButton == RIGHT) 
+	{
+  		point(mouseX, mouseY);
+  		fill(0, 0, 0);
+    	textSize(12);
+    	text(mouseX + " " +"," + " "+ mouseY, mouseX-26,mouseY-10); 
+	}
+
+}
+
+
+</script>
+<canvas id="mycanvas"></canvas>
+</head>
+
+<body>
+
+</body>
+</html>

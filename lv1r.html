@@ -1,0 +1,741 @@
+<title> Level 1 </title>
+
+<!-- copy and paste the next 2 lines to setup the sound files, you must modify the loadsoundchrome.js file with your sounds -->
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+<!-- Stop copying here -->
+
+<center>
+    <script type="text/javascript" src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+
+PImage redHero[] = new PImage[9];
+PImage gun[] = new PImage[4];
+PImage map1;
+PImage portal1;
+PImage portal2;
+PImage end;
+PImage info;
+
+
+int heart;
+
+int blade1;
+int blade2;
+int blade3;
+
+int blade1action;
+int blade2action;
+int blade3action;
+
+int canon1;
+int canon2;
+
+int canon1action;
+int canon2action;
+
+int rx;
+int ry;
+int rtime ;
+
+int guntime ;
+
+int rsize;
+
+int bladed1;
+int bladed2;
+int bladed3;
+int canond1;
+int canond2;
+
+
+
+
+boolean death;
+boolean death1;
+boolean death2;
+
+
+
+int lock;
+int soundlock;
+int gun1lock;
+int gun2lock;
+int portallock;
+
+void setup()
+{  
+	n=1;
+	while(n <= 9)
+	{
+		redHero[n] = loadImage("redo/r"+n+".png");
+		n = n + 1;
+	
+	}
+	
+	n=1;
+	while(n <= 4)
+	{
+		gun[n] = loadImage("bullet/"+n+".png");
+		n = n + 1;
+	
+	}
+	
+	map1 = loadImage("lv1.png");
+	portal1 = loadImage("portal1.png");
+	portal2 = loadImage("portal2.png");
+	heartimg = loadImage("heart.png");
+	end= loadImage("end.png");
+	info= loadImage("info.png");
+	
+	blade1 = 273;
+	blade2 = 213;
+	blade3 = -6;
+
+	canon1 = 208;
+	canon2 = 268;
+
+
+	rx=35; 
+	ry=740;
+
+	rsize = 75;
+
+	heart = 2;
+
+
+
+
+	death = false;
+	death1 = false;
+	death2 = false;
+	
+	
+				
+	lock = 0;
+	soundlock = 0;
+	portallock =0;
+	
+	rtime = 0;
+	
+}  
+
+
+void draw()
+{
+
+	gun1lock = 0;
+	gun2lock = 0;
+	
+	size(600,800);  
+	background(144,270,144);
+	frameRate( 30 );		
+
+	image(map1,0,0,600,800);
+	image(portal2,27,151,80,80);
+	image(portal1,346,340,80,80);
+	image(end,470,80,120,90);
+	image(info,80,80,80,80);
+
+
+//blade
+	noStroke()	
+	fill(255,0,0,120);
+	triangle(319,536,319,571,blade2,536);
+	triangle(172,536,172,571,blade1,571);
+	triangle(100,303,100,338,blade3,303);
+
+
+//life system
+	if (death1 == true)
+	{
+		heart = 1;
+	}
+	
+	 if (death2 == true)
+	{
+	 	heart = 0;
+	 	link("Game OVer.html");
+	}
+	
+	
+//background music
+	if(soundlock ==0)
+	{	
+		soundlock =1;
+		soundManager.play('s4');
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+//blade1 actions
+	if(blade1action == 1)
+	{
+		blade1 = blade1 + 7;
+	}
+
+	if(blade1action == 2)
+	{
+		blade1 = blade1 - 7;
+	}
+
+	if(blade1 >= 273)
+	{
+		blade1action = 2;
+	}
+	
+	if(blade1 <= 172)
+	{
+		blade1action = 1;
+	}
+
+//blade2 actions
+	if(blade2action == 1)
+	{
+		blade2 = blade2 - 7;
+	}
+
+	if(blade2action == 2)
+	{
+		blade2 = blade2 + 7;
+	}
+
+	if(blade2 <= 213)
+	{	
+		blade2action = 2;
+	}
+	
+	if(blade2 >= 314)
+	{
+		blade2action = 1;
+	}
+
+//blade2 actions
+	if(blade3action == 1)
+	{
+		blade3 = blade3 - 7;
+	}
+
+	if(blade3action == 2)
+	{
+		blade3 = blade3 + 7;
+	}
+
+	if(blade3 <= -6)
+	{
+		blade3action = 2;
+	}
+	
+	if(blade3 >= 100)
+	{
+		blade3action = 1;
+	}
+
+
+
+//canons
+	n = 1;
+	t = 0; 
+	while(n <= 4)
+	{
+		if((guntime >= t) && (guntime <= t + 10))
+		{
+			image(gun[n],canon1,276,40,40);
+			image(gun[n],canon2,320,40,40);
+		}
+	
+	
+		n	= n + 1;
+		t = t + 10;
+		
+	}
+	guntime = guntime + 9;
+	
+	
+	if(guntime >= 40)
+	{
+		guntime = 0;
+	}
+
+//canon1 actions
+	canon1action = 1;
+	
+	if(canon1 < -2&&gun1lock ==0)
+	{
+		canon1 = 208;
+		gun1lock = 1;
+		soundManager.play('s5');
+	}
+
+	if(canon1action == 1)
+	{
+		canon1 = canon1 - 13;
+	}	
+
+
+
+
+
+
+
+//canon2 actions
+	canon2action = 1;
+	
+	if(canon2 > 602&&gun2lock ==0)
+	{
+		canon2 = 268;
+		gun2lock = 1;
+		soundManager.play('s5');
+	}
+
+	if(canon2action == 1)
+	{
+		canon2 = canon2 + 13;
+	}
+
+
+
+
+
+//dying and respawning
+	if(death == true )
+	{
+		rx =35;
+		ry = 740;
+		death = false;
+	}
+
+
+//pain sound
+	if(death1 == true &&lock == 0 )
+	{
+		lock = 1;
+		soundManager.play('s0');
+	}
+
+	if(death2 == true &&lock == 1 )
+	{
+		lock = 2;
+		soundManager.play('s0');
+	}
+
+	
+	
+//counting number of lives	
+	if( heart == 2 )
+	{	
+		image(heartimg,340,670,90,60);
+		image(heartimg,370,670,90,60);
+	}
+
+	if( heart == 1 )
+	{
+		image(heartimg,340,670,90,60);
+	}
+
+
+
+//moving	
+	if(death == false)
+	{	
+		if (keyPressed == false)
+		{
+			image(redHero[1],rx,ry,80,80);
+		}
+	
+		if (keyPressed == true)
+		{
+
+			if (key == 'w')
+			{
+					
+				n = 1;
+				t = 0; 
+				while(n <= 9)
+				{
+				if((rtime >= t) && (rtime <= t + 10))
+				{
+					image(redHero[n],rx,ry,80,80);
+				}
+	
+	
+				n	= n + 1;
+				t = t + 10;
+				ry = ry -1.5;
+		
+				}
+				rtime = rtime + 24;
+
+	
+				if(rtime >= 90)
+				{
+						rtime = 0;
+				}
+	
+				
+				
+				
+				
+				
+			}
+
+			if (key == 's')
+			{
+					
+				n = 1;
+				t = 0; 
+				while(n <= 9)
+				{
+				if((rtime >= t) && (rtime <= t + 10))
+				{
+					image(redHero[n],rx,ry,80,80);
+				}
+	
+	
+				n	= n + 1;
+				t = t + 10;
+				ry = ry +1.5;
+		
+				}
+				rtime = rtime +24;
+
+	
+				if(rtime >= 90)
+				{
+					rtime = 0;
+				}
+	
+				
+			}
+	
+			if (key == 'a')
+			{	
+					
+				n = 1;
+				t = 0; 
+				while(n <= 9)
+				{
+				if((rtime >= t) && (rtime <= t + 10))
+				{
+					image(redHero[n],rx,ry,80,80);
+				}
+	
+	
+				n	= n + 1;
+				t = t + 10;
+				rx = rx -1.5;
+		
+				}
+				rtime = rtime + 24;
+
+	
+				if(rtime >= 90)
+				{
+						rtime = 0;
+				}
+
+			}
+	
+			if (key == 'd')
+			{
+				n = 1;
+				t = 0; 
+				while(n <= 9)
+				{
+				if((rtime >= t) && (rtime <= t + 10))
+				{
+					image(redHero[n],rx,ry,80,80);
+				}
+	
+	
+				n	= n + 1;
+				t = t + 10;
+				rx = rx +1.5;
+		
+				}
+				rtime = rtime + 24;
+
+	
+				if(rtime >= 90)
+				{
+						rtime = 0;
+				}
+
+			}
+
+		}
+
+	}
+
+
+//death zones
+	if (103 <rx+37 && rx+37<324 && 720<ry+34 && ry+34<800)
+	{
+		if (heart == 2)
+		{
+			death1 = true;
+			death2 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = true;
+		}
+		death = true;
+	}
+
+
+	if (0<rx+37 && rx+37<43 && 659<ry+34 && ry+34<800)
+	{
+		if (heart == 2)
+		{
+			death1 = true;
+			death2 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = true;
+		}
+		death = true;
+	}
+
+	if (0<rx+37 && rx+37<215 && 490<ry+34 && ry+34<659)
+	{
+		if (heart == 2)
+		{
+			death1 = true;
+			death2 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = true;
+		}
+		death = true;
+	}
+
+	if (275<rx+37 && rx+37<600 && 490<ry+34 && ry+34<800)
+	{
+		if (heart == 2)
+		{
+			death1 = true;
+			death2 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = true;
+		}
+		death = true;
+	}
+
+	if (0<rx+37 && rx+37<16 && 0<ry+34 && ry+34<800)
+	{
+		if (heart == 2)
+		{
+			death1 = true;
+			death2 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = true;
+		}
+		death = true;
+	}
+	
+
+	if (74<rx+37 && rx+37< 320 && 241<ry+34 && ry+34<428)
+	{
+		if (heart == 2)
+		{
+			death1 = true;
+			death2 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = true;
+		}
+		death = true;
+	}
+
+	if (450 <rx+37 && rx+37<495 && 241<ry+34 && ry+34<428)
+	{
+		if (heart == 2)
+		{
+			death1 = true;
+			death2 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = true;
+		}
+		death = true;
+	}
+
+	if (0<rx+37 && rx+37<450 && 0<ry+34 && ry+34<131)
+	{
+		if (heart == 2)
+		{
+			death1 = true;
+			death2 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = true;
+		}
+		death = true;
+	}
+
+	if (125<rx+37 && rx+37<450 && 0<ry+34 && ry+34<234)
+	{
+		if (heart == 2)
+		{
+			death1 = true;
+			death2 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = true;
+		}
+		death = true;
+	}
+
+	if (554<rx+37 && rx+37<600 && 189<ry+34 && ry+34<701)
+	{
+		if (heart == 2)
+		{
+			death1 = true;
+			death2 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = true;
+		}
+		death = true;
+	}
+
+
+	if (267<rx+37 && rx+37<330 && 429<ry+34 && ry+34<487)
+	{
+		if (heart == 2)
+		{
+			death1 = true;
+			death2 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = true;
+		}
+		death = true;
+	}
+
+
+	if (269<rx+37 && rx+37<335 && 429<ry+34 && ry+34<488)
+	{
+		if (heart == 2)
+		{
+			death1 = true;
+			death2 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = true;
+		}
+		death = true;
+	}
+
+
+
+//portal
+	if (22<rx+37 && rx+37<134 && 138<ry+34 && ry+34<238 && portallock == 0)
+	{
+		soundManager.play('s6');
+		rx=358; 
+		ry=376;
+		portallock = 1;
+	}
+
+
+	portallock = 0;
+
+
+//distances
+	bladed1 = (int)sqrt(sq((rx+37)-(blade1))+sq((ry+34)-(571)));
+	bladed2 = (int)sqrt(sq((rx+37)-(blade2))+sq((ry+34)-(536)));
+	bladed3 = (int)sqrt(sq((rx+37)-(blade3))+sq((ry+34)-(303)));
+	canond1 = (int)sqrt(sq((rx+37)-(canon1))+sq((ry+34)-(292.5)));
+	canond2 = (int)sqrt(sq((rx+37)-(canon2))+sq((ry+34)-(342)));
+    
+//death collisions
+	if(bladed1 <= 25 || bladed2 <= 25 ||  bladed3 <= 25 ||  canond1 <= 10 ||  canond2 <= 10) 
+	{
+		if (heart == 2)
+		{
+			death1 = true;
+			death2 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = true;
+		}
+		death = true;
+	}
+
+
+
+
+
+//moving to next level
+	if (442<rx+37 && rx+37<577 && 63<ry+34 && ry+34<160)
+	{
+		link("betweenr.html");
+	}
+	
+
+
+
+
+
+
+
+	if(mousePressed == true && mouseButton == RIGHT) 
+	{
+ 	  point(mouseX, mouseY);
+ 	  fill(0,0,0);
+  	  textSize(12);
+  	  text(mouseX + " " +"," + " "+ mouseY, mouseX-26,mouseY-10); 
+	}
+
+}
+
+
+</script>
+<canvas id="mycanvas"></canvas>
+</head>
+
+<body>
+
+</body>
+</html>

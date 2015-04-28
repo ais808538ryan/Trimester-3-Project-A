@@ -1,0 +1,869 @@
+<title> Level 2 </title>
+
+<!-- copy and paste the next 2 lines to setup the sound files, you must modify the loadsoundchrome.js file with your sounds -->
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+<!-- Stop copying here -->
+
+<center>
+    <script type="text/javascript" src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+PImage blueo[] = new PImage[9];
+PImage gun[] = new PImage[4];
+PImage map2;
+PImage heartimg;
+PImage monster[] = new PImage[6];
+PImage end;
+
+
+
+int monstertime ;
+
+
+
+
+float monsterspin;
+int monsterCentreX;
+int monsterCentreY;
+int monsterRadius;
+int monsterRadius2;
+int monsterRadius3;
+int monsterRadius4;
+
+int heart;
+
+
+int canon1;
+int canon2;
+int canon3;
+int canon4;
+
+int canon1action;
+int canon2action;
+int canon3action;
+int canon4action;
+
+int guntime ;
+
+int monsterd1;
+int monsterd2;
+int monsterd3;
+int monsterd4;
+
+
+
+
+
+
+
+int bx;
+int by;
+int bsize;
+int blueotime ;
+
+int canond1;
+int canond2;
+int canond3;
+int canond4;
+
+boolean death;
+boolean death1;
+boolean death2;
+boolean death3;
+
+int soundlock;
+int lock;
+int gunlock;
+
+void setup()
+{  
+	n=1;
+	while(n <= 9)
+	{
+		blueo[n] = loadImage("blueo/"+n+".png");
+		n = n + 1;
+	
+	}
+	
+	n=1;
+	while(n <= 6)
+	{
+		monster[n] = loadImage("untitled folder/"+n+".png");
+		n = n + 1;
+	
+	}
+	
+	n=1;
+	while(n <= 4)
+	{
+		gun[n] = loadImage("bullet/"+n+".png");
+		n = n + 1;
+	
+	}
+
+	
+
+
+	monstertime = 0;
+
+
+
+	map2 = loadImage("lv2.png");
+	heartimg = loadImage("heart.png");
+	end= loadImage("end.png");
+	canon1 = 270;
+	canon2 = 255;
+	canon3 = 323;
+	canon4 = 308;
+
+	
+
+
+//monster circular motion settings
+    monsterSpin = 0;
+    monsterRadius = 320;
+    monsterRadius2 = 240;
+    monsterRadius3 = 160;
+	monsterRadius4 = 100;
+	
+    monsterCentreX = 294;
+    monsterCentreY = 334;
+
+	heart = 3;
+
+	death = false;
+	death1 = false;
+	death2 = false;
+	death3 = false;
+
+
+	bx =37;
+	by = 741;
+	bsize = 75;
+	
+	soundlock = 0;
+
+	blueotime = 0;
+	guntime = 0;
+}  
+
+
+void draw()
+{
+
+	gunlock = 0;
+	
+	size(600,800);  
+	background(144,270,144);
+	frameRate( 30 );		
+
+	
+	
+	
+	image(map2,0,0,600,800);
+	image(end,234,340,120,90);
+	
+//background music
+	if(soundlock ==0)
+	{
+		soundlock =1;
+		soundManager.play('s2');
+	}
+
+//canons
+	n = 1;
+	t = 0; 
+	while(n <= 4)
+	{
+		if((guntime >= t) && (guntime <= t + 10))
+		{
+			image(gun[n],canon1,261,40,40);
+			image(gun[n],278,canon2,40,40);
+			image(gun[n],canon3,263,40,40);
+			image(gun[n],278,canon4,40,40);
+		}
+	
+	
+		n	= n + 1;
+		t = t + 10;
+		
+	}
+	guntime = guntime + 9;
+	
+	
+	if(guntime >= 40)
+	{
+		guntime = 0;
+	}
+
+//canon1 setting
+	canon1action = 1;
+	if(canon1 < -160 && gunlock ==0 )
+	{
+		gunlock =1;
+		soundManager.play('s5');
+		canon1 = 270;
+	}
+
+	if(canon1action == 1)
+	{
+		canon1 = canon1 -20;
+	}
+
+//canon2 setting
+	canon2action = 1;
+	if(canon2 < -175)
+	{	
+		canon2 = 255;
+	}
+
+	if(canon2action == 1)
+	{
+		canon2 = canon2 - 20;
+	}
+	
+//canon3 setting
+	canon3action = 1;
+	if(canon3 > 753)
+	{
+		canon3 = 323;
+	}
+
+	if(canon3action == 1)
+	{
+		canon3 = canon3 + 20;
+	}
+
+//canon4 setting
+	canon4action = 1;
+	if(canon4 > 738)
+	{
+		canon4 = 308;
+	}
+
+	if(canon4action == 1)
+	{
+		canon4 = canon4 + 20;
+	}
+
+
+
+//life system
+	if (death1 == true)
+	{
+		heart = 2;
+	}
+	
+	if (death2 == true)
+	{
+		heart = 1;
+	}
+	
+	if (death3 == true)
+	{	
+	 	heart = 0;
+	 	link("Game OVer.html");
+	}
+	
+
+
+//dying and respawning
+	if(death == true)
+	{
+		bx =47;
+		by = 741;
+		death = false;
+	}
+
+//pain sound
+	if(death1 == true &&lock == 0 )
+	{
+		lock = 1;
+		soundManager.play('s0');
+	}
+
+	if(death2 == true &&lock == 1 )
+	{
+		lock = 2;
+		soundManager.play('s0');
+	}
+
+	if(death3 == true &&lock == 2 )
+	{
+		lock = 3;
+		soundManager.play('s0');
+	}
+
+
+
+
+//counting number of lives	
+	if( heart == 3 )
+	{
+		image(heartimg,340,670,90,60);
+		image(heartimg,370,670,90,60);
+		image(heartimg,400,670,90,60);
+	}
+
+	if( heart == 2 )
+	{
+		image(heartimg,340,670,90,60);
+		image(heartimg,370,670,90,60);
+	}
+
+	if( heart == 1 )
+	{
+		image(heartimg,340,670,90,60);
+	}
+
+//moving	
+	if(death == false)
+	{	
+		if (keyPressed == false)
+		{
+			image(blueo[1],bx,by,80,80);
+		}
+	
+		if (keyPressed == true)
+		{
+
+			if (key == 'w')
+			{
+					
+				n = 1;
+				t = 0; 
+				while(n <= 9)
+				{
+				if((blueotime >= t) && (blueotime <= t + 10))
+				{
+					image(blueo[n],bx,by,80,80);
+				}
+	
+	
+				n	= n + 1;
+				t = t + 10;
+				by = by -1.2;
+		
+				}
+				blueotime = blueotime + 24;
+
+	
+				if(blueotime >= 90)
+				{
+						blueotime = 0;
+				}
+	
+			}
+
+			if (key == 's')
+			{
+					
+				n = 1;
+				t = 0; 
+				while(n <= 9)
+				{
+				if((blueotime >= t) && (blueotime <= t + 10))
+				{
+					image(blueo[n],bx,by,80,80);
+				}
+	
+	
+				n	= n + 1;
+				t = t + 10;
+				by = by +1.2;
+		
+				}
+				blueotime = blueotime + 24;
+
+	
+				if(blueotime >= 90)
+				{
+					blueotime = 0;
+				}
+	
+				
+			}
+	
+			if (key == 'a')
+			{	
+					
+				n = 1;
+				t = 0; 
+				while(n <= 9)
+				{
+				if((blueotime >= t) && (blueotime <= t + 10))
+				{
+					image(blueo[n],bx,by,80,80);
+				}
+	
+	
+				n	= n + 1;
+				t = t + 10;
+				bx = bx -1.2;
+		
+				}
+				blueotime = blueotime + 24;
+
+	
+				if(blueotime >= 90)
+				{
+						blueotime = 0;
+				}
+
+			}
+	
+			if (key == 'd')
+			{
+				n = 1;
+				t = 0; 
+				while(n <= 9)
+				{
+				if((blueotime >= t) && (blueotime <= t + 10))
+				{
+					image(blueo[n],bx,by,80,80);
+				}
+	
+	
+				n	= n + 1;
+				t = t + 10;
+				bx = bx +1.2;
+		
+				}
+				blueotime = blueotime + 24;
+
+	
+				if(blueotime >= 90)
+				{
+						blueotime = 0;
+				}
+
+			}
+
+		}
+
+	}
+
+//death zones
+	if (0 <bx+37 && bx+37<47 &&0<by+34 && by+34<800)
+	{
+		if (heart == 3)
+		{
+			death1 = true;
+			death2 = false;
+			death3 = false;
+		}
+		if (heart == 2)
+		{
+			death1 = false;
+			death2 = true;
+			death3 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = false;
+			death3 = true;
+		}
+			
+		death = true;
+	}
+
+
+	if (107<bx+37 && bx+37<150 && 108<by+34 && by+34<800)
+	{
+		if (heart == 3)
+		{
+			death1 = true;
+			death2 = false;
+			death3 = false;
+		}
+		if (heart == 2)
+		{
+			death1 = false;
+			death2 = true;
+			death3 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = false;
+			death3 = true;
+		}
+			
+		death = true;
+	}
+
+	if (150<bx+37 && bx+37<600 && 600<by+34 && by+34<800)
+	{
+		if (heart == 3)
+		{
+			death1 = true;
+			death2 = false;
+			death3 = false;
+		}
+		if (heart == 2)
+		{
+			death1 = false;
+			death2 = true;
+			death3 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = false;
+			death3 = true;
+		}
+		death = true;
+	}
+
+	if (107<bx+37 && bx+37<488 && 109<by+34 && by+34<150)
+	{
+		if (heart == 3)
+		{
+			death1 = true;
+			death2 = false;
+			death3 = false;
+		}
+		if (heart == 2)
+		{
+			death1 = false;
+			death2 = true;
+			death3 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = false;
+			death3 = true;
+		}
+			death = true;
+	}
+
+	if (449<bx+488 && bx+37<16 && 107<by+34 && by+34<539)
+	{
+		if (heart == 3)
+		{
+			death1 = true;
+			death2 = false;
+			death3 = false;
+		}
+		if (heart == 2)
+		{
+			death1 = false;
+			death2 = true;
+			death3 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = false;
+			death3 = true;
+		}
+		death = true;
+	}
+	
+	
+
+
+
+	if (209<bx+37 && bx+37< 488 && 502<by+34 && by+34<539)
+	{
+		if (heart == 3)
+		{
+			death1 = true;
+			death2 = false;
+			death3 = false;
+		}
+		if (heart == 2)
+		{
+			death1 = false;
+			death2 = true;
+			death3 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = false;
+			death3 = true;
+		}
+		death = true;
+	}
+
+	if (209 <bx+37 && bx+37<392 && 210<by+34 && by+34<360)
+	{
+		if (heart == 3)
+		{
+			death1 = true;
+			death2 = false;
+			death3 = false;
+		}
+		if (heart == 2)
+		{
+			death1 = false;
+			death2 = true;
+			death3 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = false;
+			death3 = true;
+		}
+		death = true;
+	}
+
+	if (0 <bx+37 && bx+37<600 && 0<by+34 && by+34<50)
+	{
+		if (heart == 3)
+		{
+			death1 = true;
+			death2 = false;
+			death3 = false;
+		}
+		if (heart == 2)
+		{
+			death1 = false;
+			death2 = true;
+			death3 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = false;
+			death3 = true;
+		}			
+			death = true;
+	}
+
+	if (550 <bx+37 && bx+37<600 && 0<by+34 && by+34<800)
+	{
+		if (heart == 3)
+		{
+			death1 = true;
+			death2 = false;
+			death3 = false;
+		}
+		if (heart == 2)
+		{
+			death1 = false;
+			death2 = true;
+			death3 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = false;
+			death3 = true;
+		}			
+			death = true;
+	}
+
+
+
+//monsters movements
+//monster 1
+	n = 1;
+	t = 0; 
+	while(n <= 6)
+	{
+		if((monstertime >= t) && (monstertime <= t + 10))
+		{
+			image(monster[n],monsterRadius*cos(monsterSpin)+monsterCentreX,monsterRadius*sin(monsterSpin)+monsterCentreY,80,80);
+		}
+	
+	
+		n	= n + 1;
+		t = t + 10;
+		
+	}
+	monstertime = monstertime + 1.5;
+	
+	
+	if(monstertime >= 60)
+	{
+		monstertime = 0;
+	}
+	
+	
+	//monster 2
+	n = 1;
+	t = 0; 
+	while(n <= 6)
+	{
+		if((monstertime >= t) && (monstertime <= t + 10))
+		{
+			image(monster[n],monsterRadius2*cos(monsterSpin+PI/2)+monsterCentreX,monsterRadius2*sin(monsterSpin+PI/2)+monsterCentreY,80,80);
+		}
+	
+	
+		n	= n + 1;
+		t = t + 10;
+		
+	}
+	monstertime = monstertime + 1.5;
+	
+	
+	if(monstertime >= 60)
+	{
+		monstertime = 0;
+	}
+	
+	//monster 3
+	n = 1;
+	t = 0; 
+	while(n <= 6)
+	{
+		if((monstertime >= t) && (monstertime <= t + 10))
+		{
+			image(monster[n],monsterRadius3*cos(monsterSpin+PI)+monsterCentreX,monsterRadius3*sin(monsterSpin+PI)+monsterCentreY,80,80);
+		}
+	
+	
+		n	= n + 1;
+		t = t + 10;
+		
+	}
+	monstertime = monstertime + 1.5;
+	
+	
+	if(monstertime >= 60)
+	{
+		monstertime = 0;
+	}
+	
+	
+	//monster 4
+	n = 1;
+	t = 0; 
+	while(n <= 6)
+	{
+		if((monstertime >= t) && (monstertime <= t + 10))
+		{
+			image(monster[n],monsterRadius4*cos(monsterSpin+(3*PI/2))+monsterCentreX,monsterRadius4*sin(monsterSpin+(3*PI/2))+monsterCentreY,80,80);
+		}
+	
+	
+		n	= n + 1;
+		t = t + 10;
+		
+	}
+	monstertime = monstertime + 1.5;
+	
+	
+	if(monstertime >= 60)
+	{
+		monstertime = 0;
+	}
+	
+	
+	monsterSpin = monsterSpin + PI/90;
+
+
+
+
+
+
+
+
+
+
+
+
+
+//distance with monsters
+	monsterd1 = (int)sqrt(sq((bx+37)-(monsterRadius*cos(monsterSpin)+monsterCentreX+40))+sq((by+34)-(monsterRadius*sin(monsterSpin)+monsterCentreY+40)));
+	monsterd2= (int)sqrt(sq((bx+37)-(monsterRadius2*cos(monsterSpin+PI/2)+monsterCentreX))+sq((by+34)-(monsterRadius2*sin(monsterSpin+PI/2)+monsterCentreY+40)));
+	monsterd3= (int)sqrt(sq((bx+37)-(monsterRadius3*cos(monsterSpin+PI)+monsterCentreX+40))+sq((by+34)-(monsterRadius3*sin(monsterSpin+PI)+monsterCentreY+40)));
+	monsterd4= (int)sqrt(sq((bx+37)-(monsterRadius4*cos(monsterSpin+(3*PI/2))+monsterCentreX+40))+sq((by+34)-(monsterRadius4*sin(monsterSpin+(3*PI/2))+monsterCentreY+40)));
+
+
+
+
+
+
+//distance with canons
+	canond1 = (int)sqrt(sq((bx+37)-(canon1))+sq((by+34)-(281)));
+	canond2 = (int)sqrt(sq((bx+37)-(298))+sq((by+34)-(canon2)));
+	canond3 = (int)sqrt(sq((bx+37)-(canon3))+sq((by+34)-(283)));
+	canond4 = (int)sqrt(sq((bx+37)-(298))+sq((by+34)-(canon4)));
+    
+//death collisions
+	if(canond1 <= 10 || canond2 <= 10 ||  canond3 <= 10 ||  canond4 <= 10 || monsterd1 <=30 ||  monsterd2 <= 30 ||  monsterd3<= 30||  monsterd4 <= 30 ) 
+	{
+		if (heart == 3)
+		{
+			death1 = true;
+			death2 = false;
+			death3 = false;
+		}
+		if (heart == 2)
+		{
+			death1 = false;
+			death2 = true;
+			death3 = false;
+		}
+		if (heart == 1)
+		{
+			death1 = false;
+			death2 = false;
+			death3 = true;
+		}		
+		death = true;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//level clear
+	if (244<bx+37 && bx+37<327 && 337<by+34 && by+34<440)
+	{
+		link("Victory.html");
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	if(mousePressed == true && mouseButton == RIGHT) 
+	{
+		point(mouseX, mouseY);
+   	 	fill(0,0,0);
+   	 	textSize(12);
+		text(mouseX + " " +"," + " "+ mouseY, mouseX-26,mouseY-10); 
+	}
+
+}
+
+
+</script>
+<canvas id="mycanvas"></canvas>
+</head>
+
+<body>
+
+</body>
+</html>

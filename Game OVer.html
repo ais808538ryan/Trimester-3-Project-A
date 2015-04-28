@@ -1,0 +1,123 @@
+<title> Game Over</title>
+
+<!-- copy and paste the next 2 lines to setup the sound files, you must modify the loadsoundchrome.js file with your sounds -->
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+<!-- Stop copying here -->
+
+<center>
+    <script type="text/javascript" src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+PFont pacfont;
+int lock;
+
+void setup()
+{  
+	lock = 0;
+	PacFont = loadFont("PacFont");
+}  
+
+
+void draw()
+{
+
+//background music
+	if(lock ==0)
+	{
+		lock =1;
+		soundManager.play('s7');
+	}
+
+	size(600,800);  
+	background(255,0,0);
+
+	textFont(PacFont,30);
+	fill(0,0,0);
+	textSize(60);
+
+	text("GAME OVER", 40+random(5), 380+random(5));
+	textFont(PacFont,30);
+	fill(0,255,0);
+	text("BACK TO MAIN",140,730);
+	text("RETRY!",210,650);
+	
+
+// retry button
+	if (0 <mouseX && mouseX<600 && 600<mouseY && mouseY<700)
+	{
+		noStroke();
+		fill(255,255,255,120);
+		rect(0,600,600,80,20);
+
+	}
+
+	if (mousePressed == true && mouseButton == LEFT)
+	{
+		if (0 <mouseX && mouseX<600 && 600<mouseY && mouseY<700)
+		{
+			link("Chracter Selection.html");
+		}
+	}
+
+//back to main button
+	if (0 <mouseX && mouseX<600 && 700<mouseY && mouseY<800)
+	{
+		noStroke();
+		fill(255,255,255,120);
+		rect(0,680,600,80,20);
+
+	}
+
+	if (mousePressed == true && mouseButton == LEFT)
+	{
+		if (0 <mouseX && mouseX<600 && 700<mouseY && mouseY<800)
+		{
+			link("index.html");
+		}
+	}
+
+
+//borders
+	stroke(0,0,0);
+	strokeCap(SQUARE);
+	strokeWeight(50);
+	line(0,0,0,800);
+
+	stroke(0,0,0);
+	strokeCap(SQUARE);
+	strokeWeight(50);
+	line(800,0,0,0);
+
+	stroke(0,0,0);
+	strokeCap(SQUARE);
+	strokeWeight(50);
+	line(600,0,600,800);
+
+	stroke(0,0,0);
+	strokeCap(SQUARE);
+	strokeWeight(50);
+	line(800,800,20,800);
+
+
+	if(mousePressed == true && mouseButton == RIGHT) 
+	{
+    	point(mouseX, mouseY);
+    	fill(0, 0, 0);
+    	textSize(12);
+    	text(mouseX + " " +"," + " "+ mouseY, mouseX-26,mouseY-10); 
+	}
+
+}
+
+
+</script>
+<canvas id="mycanvas"></canvas>
+</head>
+
+<body>
+
+</body>
+</html>

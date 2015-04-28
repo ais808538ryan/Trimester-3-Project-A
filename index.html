@@ -1,0 +1,130 @@
+<title> Main Menu </title>
+
+<!-- copy and paste the next 2 lines to setup the sound files, you must modify the loadsoundchrome.js file with your sounds -->
+<script type="text/javascript" src="script/soundmanager2.js"></script>
+<script type="text/javascript" src="script/loadsoundchrome.js"></script>
+<!-- Stop copying here -->
+
+<center>
+    <script type="text/javascript" src="script/processing-1.4.1.js"></script>
+    <script type="text/processing" data-processing-target="mycanvas">
+
+/* @pjs globalKeyEvents = "true"; */
+
+
+
+PImage background;
+PImage gameStart ;
+PImage redHero ;
+PImage yellowHero ;
+PImage blueHero ;
+PImage instructions ;
+
+
+void setup()
+{  
+
+	PacFont = loadFont("PacFont")
+	background = loadImage("pac.png");
+	gameStart = loadImage("Start.png");
+	redHero = loadImage("redo.png");
+	yellowHero = loadImage("yellowo.png");
+	blueHero = loadImage("blueo.png");
+	instructions = loadImage("play.png");
+	lock = 0;
+}
+
+void draw()
+{
+	size(600,800);  
+	frameRate( 30 );
+
+
+//background music
+	if(lock ==0)
+	{	
+		lock =1;
+		soundManager.play('s1');
+	}
+
+
+	textFont(PacFont,30);
+	fill(255,0,0);
+	textSize(60);
+	image(background,0,0,600,800);
+	image(redHero,30,540,200,200);
+	image(yellowHero,160,580,200,200);
+	image(blueHero,279,560,200,200);
+	image(instructions,337,270,220,90);
+	image(gameStart,70,270,220,90);
+
+	text("GO-GO",  26+random(5),  80+random(5));
+	text("REVOLUTION", 31+random(5), 180+random(5));
+	text("12345679",386+random(1), 760+random(5));
+
+//borders
+	stroke(380,20,856);
+	strokeCap(SQUARE);
+	strokeWeight(50);
+	line(0,0,0,800);
+
+	stroke(380,0,0);
+	strokeCap(SQUARE);
+	strokeWeight(50);
+	line(600,0,600,800);
+
+	stroke(0,0,255);
+	strokeCap(SQUARE);
+	strokeWeight(50);
+	line(800,0,0,0);
+
+	stroke(0,380,0);
+	strokeCap(SQUARE);
+	strokeWeight(50);
+	line(800,800,0,800);
+	
+
+//buttons
+	if (mousePressed == true && mouseButton == LEFT)
+	{
+		if (77 <mouseX && mouseX<286 && 272<mouseY && mouseY<359)
+		{
+			link("Chracter Selection.html");
+		}
+	}
+
+	if (mousePressed == true && mouseButton == LEFT)
+	{
+		if (341<mouseX && mouseX<554 && 275<mouseY && mouseY<357)
+		{
+			link("howtoplay.html");
+		}
+	}	
+
+
+
+
+
+
+
+
+
+	if(mousePressed == true && mouseButton == RIGHT) 
+	{
+   		point(mouseX, mouseY);
+   		fill(255,255,255);
+   		textSize(12);
+   		text(mouseX + " " +"," + " "+ mouseY, mouseX-26,mouseY-10); 
+	}
+
+}
+
+
+</script>
+<canvas id="mycanvas"></canvas>
+</head>
+
+<body>
+
+</body>
+</html>
